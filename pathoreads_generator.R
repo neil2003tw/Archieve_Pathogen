@@ -1,4 +1,3 @@
-
 ## Havn't add gene situation, archieved
 #fasta_generator<-function(reference,readlength=75,readnumber,seeds=1){
 #  set.seed(seeds)
@@ -61,7 +60,7 @@ for(i in 1:20){
 
 ###
 for(i in 1:20){
-  fasta_generator_pseudo(fake_ref[i],readlength = 100,readnumber = 30000,name = paste0('Pseudo_',i))
+  fasta_generator_pseudo(fake_ref[i],readlength = 150,readnumber = 30000,name = refs[i])
 }
 
 
@@ -84,13 +83,15 @@ write.table(P1_v2,paste0('code/Pseudo_reference/corrected/',refs[s]),quote = F,r
 
 
 ### Reload reference to lists
-refs<-dir('code/Pseudo_reference/old_ref/')
+refs<-dir('data_source/Pseudo_reference/corrected_ref/')
 refs<-refs[!grepl('reads',refs)]
 fake_ref<-c()
 for(i in 1:length(refs)){
-  temp_expr<-parse(text=paste0('read.table(\'code/Pseudo_reference/old_ref/',refs[i],'\',stringsAsFactors = F)'))
+  temp_expr<-parse(text=paste0('read.table(\'data_source/Pseudo_reference/corrected_ref/',
+                               refs[i],'\',stringsAsFactors = F)'))
   temp<-eval(temp_expr)
-  fake_ref[i]<-temp[2,1]
+  temp_seq<-paste0(temp[-1,1],collapse = '')
+  fake_ref[i]<-temp_seq
 }
 
 ### See gene locus length

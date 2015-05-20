@@ -12,7 +12,7 @@ blast_result<-readLines(file_result)
 close(file_result)
 index_Cstart<-grepl('^Query=',blast_result)
 index_Length<-grepl('Length=',blast_result)
-index_Glist<-grepl('\\d+\\s+(\\d+e-\\d+)\\s*$', blast_result,perl = T)
+index_Glist<-grepl('(?!\\d+\\s+) \\d+\\s+(\\d+\\.\\d+|\\d+e-\\d+)\\s*$', blast_result,perl = T)
 
 ###Subgroup data for 1st loop
 index_Step1<-which(index_Cstart|index_Length|index_Glist)
@@ -120,12 +120,14 @@ file_all<-list.files('./',recursive=T)
 file_blastresult<-grep('nr_result.out$',file_all,value=T)
 
 for(i in 1:length(file_blastresult)){
-  temp<-strsplit(file_blastresult[i],'/')[[1]]
-  output_name<-print(grep('SRR',temp,value=T))
-  print(paste('Start working on',output_name))
-  blast_result_categorize(file_blastresult[i],paste0(output_path_header,output_name,'_out.txt'))
+  temp_id<-strsplit(file_blastresult[i],'/')[[1]]
+  data_id<-temp_id[grep('trinity_out',temp_id)-1]
+  print(paste('Start working on',data_id))
+  blast_result_categorize(file_blastresult[i],paste0(output_path_header,data_id,'_out.txt'))
 }
 
+
+##\\d+\\s+(\\d+\\.\\d+|\\d+e-?\\d+)\\s*$
 
 #RSEM_original<-read.table('data/RSEM.genes.results',header=T)
 #Main_data$name<-as.character(Main_data$name)
